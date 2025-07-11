@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dark To-Do App</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Segoe UI", sans-serif;
+        background-color: #121212;
+        color: #f5f5f5;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 40px 20px;
+      }
+
+      h1 {
+        margin-bottom: 20px;
+        font-size: 32px;
+        color: #ffffff;
+        letter-spacing: 1px;
+      }
+
+      #txtbox {
+        width: 260px;
+        padding: 12px;
+        margin-bottom: 10px;
+        background-color: #1f1f1f;
+        border: 1px solid #333;
+        color: white;
+        border-radius: 6px;
+        font-size: 16px;
+        outline: none;
+      }
+
+      button {
+        padding: 10px 15px;
+        margin: 5px;
+        border: none;
+        border-radius: 6px;
+        background: #2c2c2c;
+        color: white;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background 0.3s;
+      }
+
+      button:hover {
+        background: #444;
+      }
+
+      #todos {
+        margin-top: 30px;
+        width: 100%;
+        max-width: 500px;
+      }
+
+      .todo-item {
+        background-color: #1e1e1e;
+        border: 1px solid #333;
+        padding: 15px 20px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        transition: transform 0.2s ease;
+      }
+
+      .todo-item:hover {
+        transform: scale(1.02);
+      }
+
+      .todo-item h1 {
+        font-size: 18px;
+        margin: 0;
+        color: #f5f5f5;
+      }
+
+      .todo-item button {
+        background-color: #e74c3c;
+        padding: 8px 12px;
+        font-size: 12px;
+      }
+
+      .todo-item button:hover {
+        background-color: #c0392b;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>📝 Dark To-Do List</h1>
+    <input id="txtbox" type="text" placeholder="Enter your task" />
+    <div>
+      <button onclick="addtodo()">Add</button>
+      <button onclick="deletelasttodo()">Delete Last</button>
+      <button onclick="deletefirsttodo()">Delete First</button>
+    </div>
+
+    <div id="todos"></div>
+
+    <script>
+      let todos = [];
+
+      function addtodo() {
+        const input = document.getElementById("txtbox");
+        const value = input.value.trim();
+        if (value === "") return;
+
+        todos.push({ title: value });
+        input.value = "";
+        render();
+      }
+
+      function deletefirsttodo() {
+        if (todos.length > 0) {
+          todos.splice(0, 1);
+          render();
+        }
+      }
+
+      function deletelasttodo() {
+        if (todos.length > 0) {
+          todos.pop();
+          render();
+        }
+      }
+
+      function createcomponent(todo, index) {
+        const div = document.createElement("div");
+        div.className = "todo-item";
+
+        const h1 = document.createElement("h1");
+        h1.innerText = todo.title;
+
+        const button = document.createElement("button");
+        button.innerText = "Delete";
+        button.onclick = () => {
+          todos.splice(index, 1);
+          render();
+        };
+
+        div.appendChild(h1);
+        div.appendChild(button);
+        return div;
+      }
+
+      function render() {
+        const container = document.getElementById("todos");
+        container.innerHTML = "";
+        todos.forEach((todo, index) => {
+          const item = createcomponent(todo, index);
+          container.appendChild(item);
+        });
+      }
+    </script>
+  </body>
+</html>
